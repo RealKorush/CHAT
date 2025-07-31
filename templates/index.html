@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت لینک‌های چت</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 20px;
+            text-align: right; /* راست چین کردن */
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center; /* مرکز چین کردن عناصر فرم */
+        }
+        input[type="text"] {
+            width: 80%; /* کاهش عرض ورودی */
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: left; /* چپ چین برای لینک */
+            direction: ltr; /* جهت چپ به راست برای لینک */
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .url-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .url-list li {
+            background: #e9e9e9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            direction: ltr; /* جهت چپ به راست برای نمایش لینک */
+        }
+        .url-list li button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+        .url-list li button:hover {
+            background-color: #c82333;
+        }
+        .links-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .links-section a {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+        .links-section a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ابزار تجمیع چت استریم</h1>
+        <p style="text-align: center;">لینک‌های API چت را از Streamlabs یا StreamElements اینجا وارد کنید.</p>
+        
+        <form action="/add_url" method="post">
+            <input type="text" name="chat_url" placeholder="لینک API چت را اینجا وارد کنید (مثلاً https://streamlabs.com/...)">
+            <button type="submit">افزودن لینک چت</button>
+        </form>
+
+        <div class="url-list">
+            <h2>لینک‌های چت فعال:</h2>
+            <ul>
+                {% if urls %}
+                    {% for url_info in urls %}
+                        <li>
+                            {{ url_info.url }} 
+                            <a href="/remove_url/{{ loop.index0 }}" style="background-color: #dc3545; color: white; text-decoration: none; padding: 5px 10px; border-radius: 5px;">حذف</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>هنوز لینکی اضافه نشده است.</li>
+                {% endif %}
+            </ul>
+            {% if urls %}
+                <div style="text-align: center;">
+                    <a href="/clear_urls" style="background-color: #ffc107; color: #333; margin-top: 20px;">پاک کردن همه لینک‌ها</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <hr style="margin-top: 40px; margin-bottom: 40px;">
+
+        <div class="links-section">
+            <h2>لینک‌های نمایش:</h2>
+            <p>این لینک‌ها را در OBS به عنوان Browser Source استفاده کنید:</p>
+            <a href="/chat_display" target="_blank">نمایش چت با پرده سبز</a>
+            <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
+                برای استفاده در OBS، این لینک را به عنوان Browser Source اضافه کرده و از قابلیت "Chroma Key" برای حذف رنگ سبز استفاده کنید.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
